@@ -1,0 +1,8 @@
+
+
+<p ng-show="cHost">Name: {{cHost.name}}  Host: {{cHost.host}}</p>
+<select class="hostSelect" ng-model="cHost" ng-options="host.name for host in hosts">
+  <option value="">-- Pick A Host --</option>
+</select>
+<div ng-show="cHost" id="{{cHost.alias}}" style="width: 100%; height: 300px"></div>
+<h4 ng-show="cHost">Max: Average: Runtime: Errors: {{errorCount}} </h4>

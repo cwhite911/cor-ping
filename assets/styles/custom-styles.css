@@ -1,0 +1,86 @@
+ body {
+  background-color: rgba(90, 91, 90, 0.3);
+}
+.shadow {
+  -moz-box-shadow:10px 10px 5px #000000;
+-webkit-box-shadow:10px 10px 5px  #000000;
+box-shadow: 10px 10px 5px #000000;
+}
+.cells-topleft {
+  background-color: rgba(90, 91, 90, 0.5);
+  border:solid 2px #000000;
+  -moz-border-radius-topleft: 40px;
+  -moz-border-radius-topright:1px;
+  -moz-border-radius-bottomleft:1px;
+  -moz-border-radius-bottomright:1px;
+  -webkit-border-top-left-radius:40px;
+  -webkit-border-top-right-radius:1px;
+  -webkit-border-bottom-left-radius:1px;
+  -webkit-border-bottom-right-radius:1px;
+  border-top-left-radius:40px;
+  border-top-right-radius:1px;
+  border-bottom-left-radius:1px;
+  border-bottom-right-radius:1px;
+  height: 400px;
+
+}
+
+.cells-topright {
+  background-color: rgba(90, 91, 90, 0.5);
+  border:solid 2px #000000;
+  -moz-border-radius-topleft: 1px;
+  -moz-border-radius-topright:40px;
+  -moz-border-radius-bottomleft:1px;
+  -moz-border-radius-bottomright:1px;
+  -webkit-border-top-left-radius:1px;
+  -webkit-border-top-right-radius:40px;
+  -webkit-border-bottom-left-radius:1px;
+  -webkit-border-bottom-right-radius:1px;
+  border-top-left-radius:1px;
+  border-top-right-radius:40px;
+  border-bottom-left-radius:1px;
+  border-bottom-right-radius:1px;
+  height: 400px;
+
+}
+
+.cells-bottomright {
+  background-color: rgba(90, 91, 90, 0.5);
+  border:solid 2px #000000;
+  -moz-border-radius-topleft: 1px;
+  -moz-border-radius-topright:1px;
+  -moz-border-radius-bottomleft:1px;
+  -moz-border-radius-bottomright:40px;
+  -webkit-border-top-left-radius:1px;
+  -webkit-border-top-right-radius:1px;
+  -webkit-border-bottom-left-radius:1px;
+  -webkit-border-bottom-right-radius:40px;
+  border-top-left-radius:1px;
+  border-top-right-radius:1px;
+  border-bottom-left-radius:1px;
+  border-bottom-right-radius:40px;
+  height: 400px;
+}
+
+.cells-bottomleft {
+  background-color: rgba(90, 91, 90, 0.5);
+  border:solid 2px #000000;
+  -moz-border-radius-topleft: 1px;
+  -moz-border-radius-topright:1px;
+  -moz-border-radius-bottomleft:40px;
+  -moz-border-radius-bottomright:1px;
+  -webkit-border-top-left-radius:1px;
+  -webkit-border-top-right-radius:1px;
+  -webkit-border-bottom-left-radius:40px;
+  -webkit-border-bottom-right-radius:1px;
+  border-top-left-radius:1px;
+  border-top-right-radius:1px;
+  border-bottom-left-radius:40px;
+  border-bottom-right-radius:1px;
+  height: 400px;
+
+}
+
+.hostSelect {
+
+}

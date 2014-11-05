@@ -22,9 +22,9 @@ module.exports.sockets = {
   *                                                                          *
   ***************************************************************************/
   onConnect: function(session, socket) {
-      console.log(socket.id);
-      var id = socket.id;
-      socket.emit('welcome', {hello: id});
+      // console.log(socket.id);
+      // var id = socket.id;
+      // socket.emit('welcome', {hello: id});
       // socket.on('location', function (data){
       //   console.log(data);
       // });
@@ -40,7 +40,7 @@ module.exports.sockets = {
   *                                                                          *
   ***************************************************************************/
   onDisconnect: function(session, socket) {
-      console.log('sockets.js:: onDisconnect executed!');
+      // console.log('sockets.js:: onDisconnect executed!');
     // By default: do nothing.
   },
 

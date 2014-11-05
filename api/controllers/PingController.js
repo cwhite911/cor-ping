@@ -9,15 +9,6 @@ var Monitor = require('ping-monitor'),
 		os = require('os'),
 		hosts = [];
 
-		// var test1 = new Monitor({
-		// 	website: '192.168.55.141',
-		// 	timeout: 10
-		// });
-		//
-		// var test2 = new Monitor({
-		// 	website: '192.168.55.143',
-		// 	timeout: 10
-		// });
 
 		var p = os.platform();
 
@@ -56,10 +47,9 @@ module.exports = {
 						res.send(outstring);
         });
 
-	},
-	location: function (data){
-		console.log(data.param());
 	}
+
+
 
 
 };

@@ -9,26 +9,15 @@
  */
 angular.module('corPingApp')
   .controller('MainCtrl', ['$scope', function ($scope) {
-      // var socket = io.socket.get('/ping');
-      function getLocation() {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function (position){
-            return {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            };
-          });
-        } else {
-          console.log("Geolocation is not supported by this browser.");
-        }
-      }
 
-
-      var location = getLocation();
-      io.socket.on('welcome', function (data) {
-          console.log(data);
+      //Sends event to all other subscribers
+      io.socket.on("ping", function(event){
+        console.log(event);
       });
 
-      io.socket.post('/ping/location', location);
+      io.socket.get("/ping", function(resData, jwres){
+        console.log(jwres);
+        console.log('listening for ping...');
+      });
 
   }]);

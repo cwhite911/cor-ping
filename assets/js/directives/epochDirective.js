@@ -21,8 +21,25 @@ angular.module('corPingApp')
             {
               label: 'test',
               values: [{time: new Date().getTime(), y: 0 }]
+            },
+            {
+              label: 'test1',
+              values: [{time: new Date().getTime(), y: 0 }]
             }
           ];
+
+
+
+
+$scope.y = [];
+
+io.socket.get("/ping", function(resData, jwres){
+  console.log('listening for ping...');
+});
+
+
+
+
 
         $timeout(function(){
             $scope.$watch('cHost',function(){
@@ -35,11 +52,41 @@ angular.module('corPingApp')
                   ticks: {time: 25},
                   axes: ['left', 'bottom', 'right']
                 });
+//////////////////////////////////////////////////////////////////
+///////Socket Logic /////////////////////////////////////////////
+if (!io.socket.alreadyListeningToOrders) {
+io.socket.alreadyListeningToOrders = true;
+io.socket.on('ping', function onServerSentEvent (msg) {
+console.log(msg);
+// Let's see what the server has to say...
+switch(msg.verb) {
 
+  case 'created':
+    if ($scope.cHost.host === msg.data.host){
+      msg.data.sid = msg.id;
+      $scope.message = msg.data.y;
+    //  $scope.latencyChart.push([{time: msg.data.time, y: msg.data.y}, {time: msg.data.time, y: $scope.ping.y}]); // (add the new order to the DOM)
+      $scope.$apply();              // (re-render)
+      break;
+    }
+
+
+  default: return; // ignore any unrecognized messages
+}
+});
+}
+
+
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
               var t, o, b, a;
               $scope.errorCount = 0;
               $interval(function(){
-
+                // hosts.ping1($scope.cHost.host, '8081', function (pong){
+                //   $scope.ping1 = pong + 'ms';
+                //   io.socket.post('/ping', {host: $scope.cHost.host, time: new Date().getTime(), y: pong});
+                // });
+                // console.log(hosts.ping($scope.cHost.host));
                 $http.get('/ping/getPing', {params: {ip: $scope.cHost.host }}).success(function(res){
                    t = new Date().getTime();
                    try {
@@ -56,14 +103,15 @@ angular.module('corPingApp')
                     y: a
                   };
 
-                  $http.post('/ping', {host: $scope.cHost.host, time: t, y: a }).then(function(data){
-                    $http.get('/ping', {host:$scope.cHost.host}).then(function(res3){
+                  io.socket.post('/ping', {host: $scope.cHost.host, time: t, y: a }, function(data){
+                          // $scope.latencyChart.push([$scope.ping]);
 
-                    });
                   });
 
+                  $scope.latencyChart.push([{time: t, y: $scope.message || 0 }, $scope.ping]);
 
-                  $scope.latencyChart.push([$scope.ping]);
+
+                  // $scope.latencyChart.push([$scope.ping]);
                 });
 
               }, 500);

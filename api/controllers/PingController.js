@@ -43,7 +43,6 @@ module.exports = {
 				ls.stdout.on('data', function (data) {
 						// var json = JSON.stringify(data);
             outstring+= String(data);
-
 						res.send(outstring);
         });
 

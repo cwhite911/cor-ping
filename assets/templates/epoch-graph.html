@@ -1,6 +1,6 @@
 
 {{ping1}}
-<p ng-show="cHost">Name: {{cHost.name}}  Host: {{cHost.host}}</p>
+<p ng-show="cHost">Name: {{cHost.name}}  Host: {{cHost.host}} Date: {{date}}  Date1: {{date1}}  Time: {{time}}</p>
 <!--TODO fix Hosts factory scope and remove filter-->
 <select class="hostSelect" ng-model="cHost" ng-options="host.name for host in hosts | limitTo:5">
   <option value="">-- Pick A Host --</option>

@@ -8,6 +8,13 @@ angular.module('corPingApp')
       scope: {},
       templateUrl: 'templates/epoch-graph.html',
       link: function ($scope, element, attrs) {
+
+        //Creates Unix timestamp for epochjs
+        Date.prototype.getUnixTime = function() { return this.getTime()/1000|0 };
+          if(!Date.now) Date.now = function() { return new Date(); }
+            Date.time = function() { return Date.now().getUnixTime(); }
+
+        //Creating Hosts objects
           var hosts = new HostFact();
             hosts.setHost('ucsuatrac1-vip.ci.raleigh.nc.us', 'gistst1', '192.168.55.141');
             hosts.setHost('ucsuatrac2-vip.ci.raleigh.nc.us', 'gistst2', '192.168.55.142');
@@ -16,27 +23,30 @@ angular.module('corPingApp')
             hosts.setHost('cornas01.ci.raleigh.nc.us', 'corfile1', '192.168.53.15');
             hosts.setHost('cornas02.ci.raleigh.nc.us', 'corfile2', '192.168.53.17');
 
+          //Gets Array of hosts
           $scope.hosts = hosts.getHosts();
+
+          //Default Chart data
           var lineChartData = [
             {
               label: 'test',
-              values: [{time: new Date().getTime(), y: 0 }]
+              values: [{time: new Date().getUnixTime(), y: 0 }]
             },
             {
               label: 'test1',
-              values: [{time: new Date().getTime(), y: 0 }]
+              values: [{time: new Date().getUnixTime(), y: 0 }]
             }
           ];
 
 
 
 
-$scope.y = [];
-
-io.socket.get("/ping", function(resData, jwres){
-  console.log('listening for ping...');
-});
-
+          //Starts listening get socket info
+          io.socket.get("/ping");
+            io.socket.get("/ping/getSocketID", function (resData, resJew){
+              console.log(resData);
+              $scope.socketId = resData.id;
+            });
 
 
 
@@ -46,7 +56,7 @@ io.socket.get("/ping", function(resData, jwres){
               if ($scope.cHost){
                 var eleId = '#' + $scope.cHost.alias;
                 $scope.latencyChart = angular.element(eleId).epoch({
-                  type: 'time.line',
+                  type: 'time.area',
                   data: lineChartData,
                   queueSize: 300,
                   ticks: {time: 25},
@@ -54,27 +64,26 @@ io.socket.get("/ping", function(resData, jwres){
                 });
 //////////////////////////////////////////////////////////////////
 ///////Socket Logic /////////////////////////////////////////////
-if (!io.socket.alreadyListeningToOrders) {
-io.socket.alreadyListeningToOrders = true;
-io.socket.on('ping', function onServerSentEvent (msg) {
-console.log(msg);
-// Let's see what the server has to say...
-switch(msg.verb) {
+          if (!io.socket.alreadyListeningToOrders) {
+            io.socket.alreadyListeningToOrders = true;
+            io.socket.on('ping', function onServerSentEvent (msg) {
+              console.log(msg);
+          // Let's see what the server has to say...
+            switch(msg.verb) {
 
-  case 'created':
-    if ($scope.cHost.host === msg.data.host){
-      msg.data.sid = msg.id;
-      $scope.message = msg.data.y;
-    //  $scope.latencyChart.push([{time: msg.data.time, y: msg.data.y}, {time: msg.data.time, y: $scope.ping.y}]); // (add the new order to the DOM)
-      $scope.$apply();              // (re-render)
-      break;
-    }
+            case 'created':
+              if ($scope.cHost.host === msg.data.host && msg.data.socketId !== $scope.socketId){
+                msg.data.sid = msg.id;
+                $scope.message = msg.data.y;
+                $scope.$apply();              // (re-render)
+                break;
+              }
 
 
-  default: return; // ignore any unrecognized messages
-}
-});
-}
+            default: return; // ignore any unrecognized messages
+          }
+          });
+          }
 
 
 /////////////////////////////////////////////////////////////////
@@ -88,7 +97,11 @@ switch(msg.verb) {
                 // });
                 // console.log(hosts.ping($scope.cHost.host));
                 $http.get('/ping/getPing', {params: {ip: $scope.cHost.host }}).success(function(res){
-                   t = new Date().getTime();
+                   var d = new Date();
+                   t = d.getUnixTime();
+                   $scope.time = t;
+                   $scope.date1 = d;
+                   $scope.date = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear() + ' ' + d.getHours() + ':' + d.getMinutes();
                    try {
                      o = res.split('time=')[1];
                      b = o.split(' ms\n')[0];
@@ -103,9 +116,8 @@ switch(msg.verb) {
                     y: a
                   };
 
-                  io.socket.post('/ping', {host: $scope.cHost.host, time: t, y: a }, function(data){
+                  io.socket.post('/ping', {host: $scope.cHost.host, time: t, y: a, socketId: $scope.socketId }, function(data){
                           // $scope.latencyChart.push([$scope.ping]);
-
                   });
 
                   $scope.latencyChart.push([{time: t, y: $scope.message || 0 }, $scope.ping]);

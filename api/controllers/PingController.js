@@ -7,8 +7,9 @@
 var Monitor = require('ping-monitor'),
 		cp = require('child_process'),
 		os = require('os'),
-		hosts = [];
 
+		hosts = [];
+var metrics = require('measured');
 
 		var p = os.platform();
 
@@ -16,8 +17,6 @@ var Monitor = require('ping-monitor'),
 module.exports = {
 	getPing: function (req, res, next){
 		var ip = req.param('ip');
-		// var hosts = ['10.6.4.20', '192.168.54.205'];
-		// hosts.forEach(function(host){
 		var start = +new Date;
 		var end;
 		var outstring = "";
@@ -46,9 +45,31 @@ module.exports = {
 						res.send(outstring);
         });
 
-	}
+		},
+		getStats: function (req, res){
+			var host = req.param('host');
+			var histogram = new metrics.Histogram();
+			var records = Ping.find({host: host, sort: 'y DESC'}, function(err, data){
+				if (err){
+					res.status(400).end();
+				}
+				var total = 0;
+				var count = data.length;
+				data.forEach(function(rec){
+					rec.y ? total+= rec.y : count--;
+					rec.y ? histogram.update(rec.y) : rec.y;
+				});
+				var average = (total/data.length).toFixed(2);
+				res.json({host: host, avg: average, total: total.toFixed(2), count: count, max: data[0].y, histogram: histogram});
+			});
+		},
+		getSocketId: function (req, res){
+			if (!req.isSocket) return res.badRequest();
 
-
+  			var socketId = sails.sockets.id(req.socket);
+				res.json({id: socketId});
+  			return res.ok('My socket ID is: ' + socketId);
+		}
 
 
 };

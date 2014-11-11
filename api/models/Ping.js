@@ -15,7 +15,7 @@ module.exports = {
     time: {},
     y: {
       type: 'float',
-
-    }
+    },
+    socketId: {}
   }
 };

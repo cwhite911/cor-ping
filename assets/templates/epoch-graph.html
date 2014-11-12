@@ -1,11 +1,11 @@
-
-{{ping1}}
-<p ng-show="cHost">Name: {{cHost.name}}  Host: {{cHost.host}} Date: {{date}}  Date1: {{date1}}  Time: {{time}}</p>
+<!-- <input type="text" ng-model="socketId"> -->
+<!--{{activeSockets}}-->
+<!-- <p ng-show="cHost">Name: {{cHost.name}}  Host: {{cHost.host}} Date: {{date}}  Date1: {{date1}}  Time: {{time}}</p> -->
 <!--TODO fix Hosts factory scope and remove filter-->
 <select class="hostSelect" ng-model="cHost" ng-options="host.name for host in hosts | limitTo:5">
   <option value="">-- Pick A Host --</option>
 </select>
 <div ng-show="cHost" id="{{cHost.alias}}" style="width: 100%; height: 300px"></div>
-<h4 ng-show="cHost">Max: Average: Runtime: Errors: {{errorCount}} </h4>
+<h4 ng-show="cHost">Max: {{stats.max}} Average: {{stats.avg}} StdDev: {{stats.histogram.stddev | number:2}} Runtime: Errors: {{errorCount}} </h4>
 <!-- {{restest}} -->
 <br>

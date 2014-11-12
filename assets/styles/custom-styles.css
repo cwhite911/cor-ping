@@ -81,14 +81,20 @@ box-shadow: 10px 10px 5px #000000;
 
 }
 
-.hostSelect {
 
-}
 
-#gistst1 .test .area {
+.default .area {
   fill: blue;
 }
 
-#gistst1 .test1 .area {
+.default1 .area {
   fill: green;
+}
+
+.default2 .area {
+  fill: red;
+}
+
+.default3 .area {
+  fill: purple;
 }

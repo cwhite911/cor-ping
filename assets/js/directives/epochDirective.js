@@ -17,9 +17,11 @@ angular.module('corPingApp')
         //Creating Hosts objects
           var hosts = new HostFact();
             hosts.setHost('ucsuatrac1-vip.ci.raleigh.nc.us', 'gistst1', '192.168.55.141');
-            hosts.setHost('ucsuatrac2-vip.ci.raleigh.nc.us', 'gistst2', '192.168.55.142');
-            hosts.setHost('mapststarcsvr1.ci.raleigh.nc.us', 'gistst3', '192.168.55.162');
-            hosts.setHost('mapststarcsvr2.ci.raleigh.nc.us', 'gistst4', '192.168.55.163');
+            hosts.setHost('ucsuatrac2-vip.ci.raleigh.nc.us', 'gistst2', '192.168.55.143');
+            hosts.setHost('ucsprdrac1-vip.ci.raleigh.nc.us', 'gisprd1', '192.168.54.221');
+            hosts.setHost('ucsprdrac2-vip.ci.raleigh.nc.us', 'gisprd2', '192.168.54.223');
+            hosts.setHost('gisarcweb1.ci.raleigh.nc.us', 'arcgisServer1', '192.168.54.204');
+            hosts.setHost('gisarcweb2.ci.raleigh.nc.us', 'arcgisServer2', '192.168.54.205');
             hosts.setHost('cornas01.ci.raleigh.nc.us', 'corfile1', '192.168.53.15');
             hosts.setHost('cornas02.ci.raleigh.nc.us', 'corfile2', '192.168.53.17');
 

@@ -60,7 +60,7 @@ module.exports = {
 					rec.y ? histogram.update(rec.y) : rec.y;
 				});
 				var average = (total/data.length).toFixed(2);
-				res.json({host: host, avg: average, total: total.toFixed(2), count: count, max: data[0].y, histogram: histogram});
+				res.json({host: host, avg: average, total: total.toFixed(2), count: count, max: histogram.max, histogram: histogram});
 			});
 		},
 		getSocketId: function (req, res){

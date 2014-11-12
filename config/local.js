@@ -80,7 +80,7 @@ module.exports = {
    * 'development' environment.                                              *
    ***************************************************************************/
 
-   environment: process.env.NODE_ENV || 'production',
+   environment: process.env.NODE_ENV || 'development',
 
    connections: {
 
@@ -88,11 +88,11 @@ module.exports = {
 
      mongo: {
        adapter: 'sails-mongo',
-       host: 'kahana.mongohq.com',
-       port: 10061,
-       user: 'ping',
-       password: 'ping',
-       database: 'mean'
+       host: 'localhost',
+       port: 27017,
+       user: '',
+       password: '',
+       database: 'ping'
      },
    }
 

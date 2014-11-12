@@ -69,6 +69,37 @@ module.exports = {
   			var socketId = sails.sockets.id(req.socket);
 				res.json({id: socketId});
   			return res.ok('My socket ID is: ' + socketId);
+		},
+		getTime: function (req, res){
+			var time = req.param('time'),
+					host = req.param('host'),
+					temp = [],
+					results = [],
+					records = Ping.find({host: host, time: time}, function(err, data){
+						if (err){
+							res.status(400).end();
+						}
+						data.forEach(function(data){
+							temp.length === 0 ? temp.push(data.socketId) : temp.indexOf(data.socketId) === -1 ? temp.push(data.socketId) : temp;
+						});
+						function avg (socId){
+							var sum = 0,
+									count = 0,
+									avg = 0.0;
+							data.forEach(function(val){
+								if (val.socketId === socId){
+									sum+=val.y;
+									count++;
+								}
+							});
+							var avg = sum/count;
+							results.push({host: host, time: time, y: avg.toFixed(2), socketId: socId})
+						}
+						for (var i = 0, x = temp.length; i < x; i++){
+							avg(temp[i]);
+						}
+						res.json(results);
+					});
 		}
 
 

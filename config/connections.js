@@ -58,11 +58,11 @@ module.exports.connections = {
   // ***************************************************************************/
   mongo: {
     adapter: 'sails-mongo',
-    host: 'kahana.mongohq.com',
-    port: 10061,
+    host: 'localhost',
+    port: 27017,
     user: '',
     password: '',
-    database: 'mean',
+    database: 'ping',
     schema: true
   },
   //

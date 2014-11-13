@@ -58,7 +58,7 @@ angular.module('corPingApp')
           io.socket.get("/ping");
             io.socket.get("/ping/getSocketID", function (resData, resJew){
               console.log(resData);
-              $scope.socketId = resData.id + 2;
+              $scope.socketId = resData.id;
             });
 
 
@@ -129,43 +129,36 @@ angular.module('corPingApp')
                 hosts.ping1($scope.cHost.host, '8081', function (pong){
                   try {
                   $scope.ping1 = pong + 'ms';
-                  var d = new Date();
-                  t = d.getUnixTime();
+                  t = new Date().getUnixTime();
                   $scope.ping = {
                       time: t,
                       y: pong
                     };
-                  io.socket.post('/ping', {host: $scope.cHost.host, time: t, y: pong, socketId: $scope.socketId });
+                  io.socket.post('/ping', {host: $scope.cHost.host, time: t, y: pong, socketId: $scope.socketId },function (){
+                    $http.get('/ping/getTime', {params: {host: $scope.cHost.host, time: t}}).success(function(res){
+                      var res = res.sort();
+                      var order = [];
+                      for (var i = 0, x = res.length; i < x; i++){
+                        res[i].y = parseFloat(res[i].y);
+                        res[i].time = parseInt(res[i].time);
+                        res[i].host === $scope.cHost.host ? order.unshift(res[i]) : order.push(res[i]);
+                      }
+
+                      for( var i = order.length; i < 4; i++){
+                        order.push({time: res[0].time, y: 0});
+                      }
+                      $scope.latencyChart.push(order);
+                    });
+
+                  });
+
+
+
                 }
                 catch (TypeError){
                   $scope.errorCount+=1;
                 }
                 });
-                // console.log(hosts.ping($scope.cHost.host));
-                // $http.get('/ping/getPing', {params: {ip: $scope.cHost.host }}).success(function(res){
-                //    var d = new Date();
-                //    t = d.getUnixTime();
-                //    $scope.time = t;
-                //    $scope.date1 = d;
-                //    $scope.date = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear() + ' ' + d.getHours() + ':' + d.getMinutes();
-                //    try {
-                //      o = res.split('time=')[1];
-                //      b = o.split(' ms\n')[0];
-                //      a = parseFloat(b).toFixed(3);
-                //      a = parseFloat(a);
-                //    }
-                //    catch (TypeError){
-                //      $scope.errorCount+=1
-                //    }
-                //   $scope.ping = {
-                //     time: t,
-                //     y: a
-                //   };
-                //
-                //   io.socket.post('/ping', {host: $scope.cHost.host, time: t, y: a, socketId: $scope.socketId }, function(data){
-                //           // $scope.latencyChart.push([$scope.ping]);
-                //   });
-
 
                   //Prepares data to be sent to chart by checking for a valid message from socket
                   var sendData = [$scope.ping, {time: t, y: 0}, {time: t, y: 0}, {time: t, y: 0}];
@@ -185,11 +178,8 @@ angular.module('corPingApp')
                   }
 
                   }
-                  $scope.latencyChart.push(sendData);
+                  // $scope.latencyChart.push(sendData);
 
-
-                  // $scope.latencyChart.push([$scope.ping, {time: t, y: 0}, {time: t, y: 0}, {time: t, y: 0}]);
-                // });
 
               }, 500);
             }

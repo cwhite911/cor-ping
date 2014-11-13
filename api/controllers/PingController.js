@@ -71,14 +71,17 @@ module.exports = {
   			return res.ok('My socket ID is: ' + socketId);
 		},
 		getTime: function (req, res){
+			//Get Parameters from request
 			var time = req.param('time'),
 					host = req.param('host'),
 					temp = [],
 					results = [],
+					//Find records where parameters are met
 					records = Ping.find({host: host, time: time}, function(err, data){
 						if (err){
 							res.status(400).end();
 						}
+						//Loop through returned records and push unique socketids to temp array
 						data.forEach(function(data){
 							temp.length === 0 ? temp.push(data.socketId) : temp.indexOf(data.socketId) === -1 ? temp.push(data.socketId) : temp;
 						});
@@ -98,6 +101,7 @@ module.exports = {
 						for (var i = 0, x = temp.length; i < x; i++){
 							avg(temp[i]);
 						}
+						sails.sockets.blast('chart', results );
 						res.json(results);
 					});
 		}

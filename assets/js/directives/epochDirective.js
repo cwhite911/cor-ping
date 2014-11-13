@@ -55,7 +55,7 @@ angular.module('corPingApp')
           //Starts listening get socket info
           $scope.classNames = [];
           $scope.activeSockets = [];
-          io.socket.get("/ping");
+          io.socket.get("/ping/getTime");
             io.socket.get("/ping/getSocketID", function (resData, resJew){
               console.log(resData);
               $scope.socketId = resData.id;
@@ -83,41 +83,62 @@ angular.module('corPingApp')
 //////////////////////////////////////////////////////////////////
 ///////Socket Logic /////////////////////////////////////////////
 
-          io.socket.on('ping', function onServerSentEvent (msg) {
+        io.socket.on('chart', function (res){
+          if ($scope.cHost.host == res[0].host){
 
-          // Let's see what the server has to say...
-            switch(msg.verb) {
-
-            case 'created':
-              if ($scope.cHost.host === msg.data.host && msg.data.socketId !== $scope.socketId){
-                //Creates Class names
-                var classCount = 1;
-                var className = 'default' + classCount;
-                $scope.activeSockets.length === 0 ? $scope.activeSockets.push({id: msg.data.socketId, class: className}) : $scope.activeSockets;
-                //Checks if socket is active
-              $scope.activeSockets.forEach(function(soc){
-                  if (soc.id === msg.data.socketId){
-                    $scope.className = soc.class;
-                  }
-                  else{
-                    $scope.activeSockets >= 1 ? $scope.activeSockets.push({id: msg.data.socketId, class: className}) : $scope.activeSockets;
-                    classCount++;
-                    $scope.className = soc.class;
-
-
-                  }
-                });
-
-                $scope.message = msg.data.y;
-                $scope.$apply();
-              }      // (re-render)
-                break;
-
-
-
-            default: return; // ignore any unrecognized messages
+          var res = res.sort();
+          var order = [];
+          for (var i = 0, x = res.length; i < x; i++){
+            res[i].y = parseFloat(res[i].y);
+            res[i].time = parseInt(res[i].time);
+            res[i].socketId === $scope.socketId ? order.unshift(res[i]) : order.push(res[i]);
           }
-          });
+
+          for( var i = order.length; i < 4; i++){
+            order.push({time: res[0].time, y: 0});
+          }
+          console.log(order);
+          $scope.latencyChart.push(order);
+        }
+        });
+
+//////////////////////////////////////////////////////////////////
+
+        // io.socket.on('ping', function onServerSentEvent (msg) {
+        //     console.log(msg);
+        //   // Let's see what the server has to say...
+        //     switch(msg.verb) {
+        //
+        //     case 'created':
+        //       if ($scope.cHost.host === msg.data.host && msg.data.socketId !== $scope.socketId){
+        //         //Creates Class names
+        //         var classCount = 1;
+        //         var className = 'default' + classCount;
+        //         $scope.activeSockets.length === 0 ? $scope.activeSockets.push({id: msg.data.socketId, class: className}) : $scope.activeSockets;
+        //         //Checks if socket is active
+        //       $scope.activeSockets.forEach(function(soc){
+        //           if (soc.id === msg.data.socketId){
+        //             $scope.className = soc.class;
+        //           }
+        //           else{
+        //             $scope.activeSockets >= 1 ? $scope.activeSockets.push({id: msg.data.socketId, class: className}) : $scope.activeSockets;
+        //             classCount++;
+        //             $scope.className = soc.class;
+        //
+        //
+        //           }
+        //         });
+        //
+        //         $scope.message = msg.data.y;
+        //         $scope.$apply();
+        //       }      // (re-render)
+        //         break;
+        //
+        //
+        //
+        //     default: return; // ignore any unrecognized messages
+        //   }
+        //   });
 
 
 
@@ -134,52 +155,18 @@ angular.module('corPingApp')
                       time: t,
                       y: pong
                     };
-                  io.socket.post('/ping', {host: $scope.cHost.host, time: t, y: pong, socketId: $scope.socketId },function (){
-                    $http.get('/ping/getTime', {params: {host: $scope.cHost.host, time: t}}).success(function(res){
-                      var res = res.sort();
-                      var order = [];
-                      for (var i = 0, x = res.length; i < x; i++){
-                        res[i].y = parseFloat(res[i].y);
-                        res[i].time = parseInt(res[i].time);
-                        res[i].host === $scope.cHost.host ? order.unshift(res[i]) : order.push(res[i]);
-                      }
-
-                      for( var i = order.length; i < 4; i++){
-                        order.push({time: res[0].time, y: 0});
-                      }
-                      $scope.latencyChart.push(order);
-                    });
-
+                  //Post to socket
+                  io.socket.post('/ping', {host: $scope.cHost.host, time: t, y: pong, socketId: $scope.socketId },function (data){
+                      //Get result from socket that triggers event 'chart'
+                      io.socket.get("/ping/getTime", {host: data.host, time: data.time});
                   });
-
-
-
                 }
                 catch (TypeError){
                   $scope.errorCount+=1;
                 }
+
+
                 });
-
-                  //Prepares data to be sent to chart by checking for a valid message from socket
-                  var sendData = [$scope.ping, {time: t, y: 0}, {time: t, y: 0}, {time: t, y: 0}];
-                  if (typeof $scope.message === 'number' && $scope.message !== NaN){
-                  if ($scope.activeSockets.length > 0){
-                    switch ($scope.className){
-                      case "default1":
-                        sendData.splice(1,0, {time: t, y: $scope.message});
-                        break;
-                      case "default2":
-                        sendData.splice(2,0, {time: t, y: $scope.message});
-                        break;
-                      case "default3":
-                        sendData.splice(3,0, {time: t, y: $scope.message});
-                        break;
-                    }
-                  }
-
-                  }
-                  // $scope.latencyChart.push(sendData);
-
 
               }, 500);
             }

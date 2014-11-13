@@ -84,17 +84,17 @@ box-shadow: 10px 10px 5px #000000;
 
 
 .default .area {
-  fill: blue;
+  fill: rgba(0, 0, 255, 0.7);
 }
 
 .default1 .area {
-  fill: green;
+  fill: rgba(0, 249, 0, 0.7);
 }
 
 .default2 .area {
-  fill: red;
+  fill:  rgba(215, 44, 44, 0.8);
 }
 
 .default3 .area {
-  fill: purple;
+  fill: rgba(215, 44, 255, 0.8);
 }

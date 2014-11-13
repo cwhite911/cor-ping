@@ -136,18 +136,18 @@ angular.module('corPingApp')
                     };
                   io.socket.post('/ping', {host: $scope.cHost.host, time: t, y: pong, socketId: $scope.socketId },function (){
                     $http.get('/ping/getTime', {params: {host: $scope.cHost.host, time: t}}).success(function(res){
-                      res.forEach(function(item){
-                        console.log(item);
-                        item.y = parseFloat(item.y);
-                        item.time = parseInt(item.time);
-                        delete item.host;
-                        delete item.socketId;
-                      });
-                      console.log(res);
-                      for( var i = res.length; i < 4; i++){
-                        res.push({time: t, y: 0});
+                      var res = res.sort();
+                      var order = [];
+                      for (var i = 0, x = res.length; i < x; i++){
+                        res[i].y = parseFloat(res[i].y);
+                        res[i].time = parseInt(res[i].time);
+                        res[i].host === $scope.cHost.host ? order.unshift(res[i]) : order.push(res[i]);
                       }
-                      $scope.latencyChart.push(res);
+
+                      for( var i = order.length; i < 4; i++){
+                        order.push({time: res[0].time, y: 0});
+                      }
+                      $scope.latencyChart.push(order);
                     });
 
                   });

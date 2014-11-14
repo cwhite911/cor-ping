@@ -29,9 +29,8 @@ angular.module('corPingApp')
       },
       this.ping1 = function (host, port, pong) {
 
-        var started = new Date().getTime();
-
-        var http = new XMLHttpRequest();
+        var http = new XMLHttpRequest(),
+            started = new Date().getTime();
 
         http.open("GET", "http://" + host + ":" + port, /*async*/true);
         http.onreadystatechange = function() {

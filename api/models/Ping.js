@@ -16,6 +16,10 @@ module.exports = {
     y: {
       type: 'float',
     },
-    socketId: {}
+    socketId: {},
+    name: {
+      type: 'string'
+    },
+    location: {}
   }
 };

@@ -71,33 +71,43 @@ module.exports = {
   			return res.ok('My socket ID is: ' + socketId);
 		},
 		getTime: function (req, res){
+			//Get Parameters from request
 			var time = req.param('time'),
 					host = req.param('host'),
 					temp = [],
 					results = [],
+					user = '',
+					//Find records where parameters are met
 					records = Ping.find({host: host, time: time}, function(err, data){
 						if (err){
 							res.status(400).end();
 						}
-						data.forEach(function(data){
-							temp.length === 0 ? temp.push(data.socketId) : temp.indexOf(data.socketId) === -1 ? temp.push(data.socketId) : temp;
+						//Loop through returned records and push unique socketids to temp array
+						data.forEach(function(rec){
+							user = rec.name;
+							temp.length === 0 ? temp.push(user) : temp.indexOf(user) === -1 ? temp.push(user) : temp;
 						});
-						function avg (socId){
+						function avg (user){
 							var sum = 0,
 									count = 0,
+									socId = '',
 									avg = 0.0;
 							data.forEach(function(val){
-								if (val.socketId === socId){
+								if (val.name === user){
+
 									sum+=val.y;
 									count++;
+									socId = val.socketId;
 								}
 							});
 							var avg = sum/count;
-							results.push({host: host, time: time, y: avg.toFixed(2), socketId: socId})
+							results.push({host: host, time: time, y: avg.toFixed(2), socketId: socId , name: user})
 						}
+						//Runs the Averages
 						for (var i = 0, x = temp.length; i < x; i++){
 							avg(temp[i]);
 						}
+						sails.sockets.blast('chart', results );
 						res.json(results);
 					});
 		}

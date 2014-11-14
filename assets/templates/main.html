@@ -1,10 +1,32 @@
 <!-- <select ng-model="host" ng-options="host for host in hosts"></select> -->
 <br><br>
+<!-- Button trigger modal -->
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Welcome!</h4>
+      </div>
+      <div class="modal-body">
+        <p>Please Set your Name and Location...</p>
+        <ul>
+          <li>Name:      <input type="text" ng-model="setup.name" placeholder="Name..." required></li>
+          <li>Location:  <input type="text" ng-model="setup.location"></li>
+        <ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 <img ng-hide="true" id='junkOne' src="" href=""/>
-<h3>You are <strong style="color: blue;">blue</strong></h3>
+<h3><strong style="color: blue;"> Blue</strong>: {{setup.name}} @ {{setup.location}}</h3>
 <div class="row">
   <div class="col-md-6 cells-topleft">
-  <epoch-graph></epoch-graph>
+  <epoch-graph name="setup.name" location="setup.location"></epoch-graph>
 </div>
 <div class="col-md-6 cells-topright">
   <epoch-graph></epoch-graph>

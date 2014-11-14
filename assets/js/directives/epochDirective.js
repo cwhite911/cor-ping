@@ -32,25 +32,15 @@ angular.module('corPingApp')
           $scope.hosts = hosts.getHosts();
 
           //Default Chart data
-          var lineChartData = [
-            {
-              label: 'default',
-              values: [{time: new Date().getUnixTime(), y: 0 }]
-            },
-            {
-              label: 'default1',
-              values: [{time: new Date().getUnixTime(), y: 0 }]
-            },
-            {
-              label: 'default2',
-              values: [{time: new Date().getUnixTime(), y: 0 }]
-            },
-            {
-              label: 'default3',
-              values: [{time: new Date().getUnixTime(), y: 0 }]
-            },
-
-          ];
+        var lineChartData = [],
+              chartTime = new Date().getUnixTime();
+          for (var i = 0; i < 16; i++){
+              var chartLable = 'default' + i;
+              lineChartData.push({
+                label: chartLable,
+                values: [{time: chartTime , y: 0 }]
+              });
+          }
 
 
 
@@ -97,7 +87,7 @@ angular.module('corPingApp')
             res[i].socketId === $scope.socketId && res[i].name === $scope.name ? order.unshift(res[i]) : order.push(res[i]);
           }
 
-          for( var i = order.length; i < 4; i++){
+          for( var i = order.length; i < 16; i++){
             order.push({time: res[0].time, y: 0});
           }
           $scope.latencyChart.push(order);
@@ -140,7 +130,7 @@ angular.module('corPingApp')
               $scope.message = "Please select a host";
             }
           });
-        }, 500);
+        }, 1000);
       }
     }
   });

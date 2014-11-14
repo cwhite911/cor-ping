@@ -83,7 +83,7 @@ box-shadow: 10px 10px 5px #000000;
 
 
 
-.default .area {
+.default0 .area {
   fill: rgba(0, 0, 255, 0.7);
 }
 
@@ -96,5 +96,41 @@ box-shadow: 10px 10px 5px #000000;
 }
 
 .default3 .area {
+  fill: rgba(215, 44, 255, 0.8);
+}
+.default4 .area {
+  fill: rgba(215, 44, 190, 0.8)
+}
+.default5 .area {
+  fill: rgba(0, 255, 190, 0.8);
+}
+.default6 .area {
+  fill: rgba(0, 0, 92, 0.8);
+}
+.default7 .area {
+  fill: rgba(255, 255, 92, 0.8);
+}
+.default8 .area {
+  fill: rgba(255, 255, 221, 0.8);
+}
+.default9 .area {
+  fill: rgba(255, 255, 255, 0.8);
+}
+.default10 .area {
+  fill: rgba(70, 115, 255, 0.8);
+}
+.default11 .area {
+  fill: rgba(70, 115, 68, 0.8);
+}
+.default12 .area {
+  fill: rgba(70, 255, 68, 0.8);
+}
+.default13 .area {
+  fill: rgba(232, 255, 0, 0.8);
+}
+.default14 .area {
+  fill: rgba(215, 44, 255, 0.8);
+}
+.default15 .area {
   fill: rgba(215, 44, 255, 0.8);
 }

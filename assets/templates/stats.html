@@ -1,0 +1,7 @@
+<h1>Server Statistics</h1>
+<select class="hostSelect" ng-model="cHost" ng-options="host.name for host in hosts | limitTo:8">
+  <option value="">-- Pick A Host --</option>
+</select>
+<pre>
+{{stats | json}}
+</pre>

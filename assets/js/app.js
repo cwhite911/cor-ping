@@ -6,5 +6,9 @@ angular.module('corPingApp', ['ngRoute'])
       .when('/', {
         templateUrl: 'templates/main.html',
         controller: 'MainCtrl'
+      })
+      .when('/stats', {
+        templateUrl: 'templates/stats.html',
+        controller: 'StatsCtrl'
       });
   }]);
